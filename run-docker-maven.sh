@@ -9,4 +9,4 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 cd "$SCRIPT_DIR"
 
-docker build -f Dockerfile.mvn -t deleteme --progress=plain .
+docker build --no-cache -f Dockerfile.mvn -t deleteme --progress=plain .
