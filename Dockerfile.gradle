@@ -1,15 +1,20 @@
-FROM gradle:8.12.0-jdk17-alpine@sha256:5239bc3f0697647f7747ac3289db5bacd5ad70eb7328a2e404d12836bd547e4c as build
+FROM gradle:8.10.2-jdk17-alpine@sha256:bc4cfcd317082aa35b3d5d86bbaa90f958fc3a3088ac8077db9dc443c1a347e7 as build
 
-ENV SPRING_PETCLINIC_SHA256SUM="b42e0b8119bb2640a627c74c32eacdb15a12d1ac73373b36cb6f3f14c11bc6b0"
+ENV SPRING_PETCLINIC_SHA256SUM="e4372c5431107f49107c78dbcdca5d79b75dc01e300b3fa80ea99995a388b698"
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
+
+ARG SOURCE_DATE_EPOCH="0"
 
 WORKDIR /project
 COPY . /project
-RUN --mount=type=cache,target=/root/.gradle gradle build -x test -x processTestAot
+RUN --mount=type=cache,target=/root/.gradle gradle build -x test
 RUN sha256sum ./build/libs/*.jar
 RUN echo "${SPRING_PETCLINIC_SHA256SUM} ./build/libs/spring-petclinic-3.4.0.jar" | sha256sum --check --status
 
 FROM bellsoft/liberica-openjre-alpine-musl:17.0.14@sha256:652de1188aba3d475cbae2d4c47b470188fc2aff227bf68a7e785ead86090168
+
+ARG SOURCE_DATE_EPOCH="0"
+
 WORKDIR /app
 RUN addgroup --system javauser && adduser -S -s /bin/false -G javauser javauser
 COPY --from=build /project/target/spring-petclinic*.jar /app/java-application.jar

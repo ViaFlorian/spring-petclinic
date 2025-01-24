@@ -162,15 +162,6 @@
         <version>0.12</version>
         <executions>
           <execution>
-            <id>strip-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>strip-jar</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>strip-archive</id>
-            <phase>pre-integration-test</phase>
             <goals>
               <goal>strip-jar</goal>
             </goals>

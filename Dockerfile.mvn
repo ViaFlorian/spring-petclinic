@@ -1,7 +1,9 @@
 FROM maven:3.9.9-eclipse-temurin-17-alpine@sha256:9866854ddd473cc38099437358d8234848a3878bb99053fbd2a23598b902039c AS build
 
-ENV SPRING_PETCLINIC_SHA256SUM="b6ef9d0766542890453a66d3aa55aa01250f8364c32e020f73d3506ee1e49f3c"
+ENV SPRING_PETCLINIC_SHA256SUM="e4372c5431107f49107c78dbcdca5d79b75dc01e300b3fa80ea99995a388b698"
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
+
+ARG SOURCE_DATE_EPOCH="0"
 
 RUN mkdir /project
 COPY . /project
@@ -11,6 +13,9 @@ RUN sha256sum /project/target/spring-petclinic*.jar
 RUN echo "${SPRING_PETCLINIC_SHA256SUM} /project/target/spring-petclinic-3.4.0-SNAPSHOT.jar" | sha256sum --check --status
 
 FROM bellsoft/liberica-openjre-alpine-musl:17.0.14@sha256:652de1188aba3d475cbae2d4c47b470188fc2aff227bf68a7e785ead86090168
+
+ARG SOURCE_DATE_EPOCH="0"
+
 WORKDIR /app
 RUN addgroup --system javauser && adduser -S -s /bin/false -G javauser javauser
 COPY --from=build /project/target/spring-petclinic*.jar /app/java-application.jar
