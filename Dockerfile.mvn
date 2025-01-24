@@ -1,12 +1,12 @@
 FROM maven:3.9.9-eclipse-temurin-17-alpine@sha256:9866854ddd473cc38099437358d8234848a3878bb99053fbd2a23598b902039c AS build
 
-ENV SPRING_PETCLINIC_SHA256SUM="9f72cf33228167e57e7ef3b1f11837dd06c7bcd7b750eb1f0681779c85abe41d"
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV SPRING_PETCLINIC_SHA256SUM="381f4f319e09410b56585b5e0859a5fe8b67a3a1da4641f0d0633c6685b95244"
+SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
 RUN mkdir /project
 COPY . /project
 WORKDIR /project
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 ./mvnw clean package -DskipTests
 RUN sha256sum /project/target/spring-petclinic*.jar
 RUN echo "${SPRING_PETCLINIC_SHA256SUM} /project/target/spring-petclinic-3.4.0-SNAPSHOT.jar" | sha256sum --check --status
 

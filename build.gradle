@@ -21,6 +21,11 @@ java {
   sourceCompatibility = JavaVersion.VERSION_17
 }
 
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
 repositories {
   mavenCentral()
 }
@@ -72,6 +77,14 @@ checkstyle {
 checkstyleNohttp {
   configDirectory = project.file('src/checkstyle')
   configFile = file('src/checkstyle/nohttp-checkstyle.xml')
+}
+
+// Reproducible builds in all child projects
+subprojects {
+    tasks.withType(AbstractArchiveTask) {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
 }
 
 tasks.named("formatMain").configure { dependsOn("checkstyleMain") }

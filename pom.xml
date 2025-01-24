@@ -157,6 +157,27 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>io.github.zlika</groupId>
+        <artifactId>reproducible-build-maven-plugin</artifactId>
+        <version>0.12</version>
+        <executions>
+          <execution>
+            <id>strip-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>strip-jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>strip-archive</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>strip-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
