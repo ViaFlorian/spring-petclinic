@@ -1,11 +1,11 @@
 FROM gradle:8.12.0-jdk17-alpine@sha256:5239bc3f0697647f7747ac3289db5bacd5ad70eb7328a2e404d12836bd547e4c as build
 
-ENV SPRING_PETCLINIC_SHA256SUM="3bdd29e6e5fe17d17e36b09021ac1a22c5c8cdef7610448fc4323ffceee7913f"
+ENV SPRING_PETCLINIC_SHA256SUM="b42e0b8119bb2640a627c74c32eacdb15a12d1ac73373b36cb6f3f14c11bc6b0"
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
 WORKDIR /project
 COPY . /project
-RUN --mount=type=cache,target=/root/.gradle ./gradlew build -x test -x processTestAot
+RUN --mount=type=cache,target=/root/.gradle gradle build -x test -x processTestAot
 RUN sha256sum ./build/libs/*.jar
 RUN echo "${SPRING_PETCLINIC_SHA256SUM} ./build/libs/spring-petclinic-3.4.0.jar" | sha256sum --check --status
 
